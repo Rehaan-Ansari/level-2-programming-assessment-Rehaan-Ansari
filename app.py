@@ -153,6 +153,9 @@ class SignUpPage:
         self.window = root
         self.window.title("Sign Up - Roskill Roundup")
 
+        # Maximize the window to fullscreen
+        self.window.state('zoomed')
+
         self.frame = Frame(self.window, bg='white')
         self.frame.place(relx=0.5, rely=0.5, anchor=CENTER, width=500, height=450)
 
@@ -195,6 +198,9 @@ class MainInterface:
     def __init__(self, root):
         self.window = root
         self.window.title("Main Interface - Roskill Roundup")
+
+        # Maximize the window to fullscreen
+        self.window.state('zoomed')
 
         self.frame = Frame(self.window, bg='white')
         self.frame.place(relx=0.5, rely=0.5, anchor=CENTER, width=800, height=600)
