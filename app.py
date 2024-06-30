@@ -4,6 +4,9 @@ from PIL import Image, ImageTk
 import os
 import app_settings as settings
 
+# Dictionary to store user data
+user_data = {}
+
 class App:
     def __init__(self):
         self.window = Tk()
@@ -46,9 +49,8 @@ class App:
         welcome_text_section = Frame(welcome_text_frame, bg='white', padx=20, pady=20)
         welcome_text_section.pack(fill=BOTH, expand=True)
 
-        subtitle = ("Welcome to Roskill Pulse, your hub for school connections and collaboration! Stay in the loop with "
-                    "upcoming events, view important announcements, and access essential resources. Get involved, stay "
-                    "informed, and make the most of your school community experience today!")
+        subtitle = ("Welcome to Roskill Pulse! Engage with your school community, stay informed about events, and "
+                    "access important resources with ease. Your hub for everything school-related.")
         subtitle_label = Label(welcome_text_section, text=subtitle, font=("Helvetica", 18), wraplength=460, justify=CENTER, bg='white')
         subtitle_label.pack(expand=True, fill=BOTH, pady=(10, 10))
 
@@ -73,7 +75,7 @@ class App:
         self.password_entry.bind("<FocusIn>", lambda event: self.clear_placeholder(event, "Password"))
         self.password_entry.bind("<FocusOut>", lambda event: self.restore_placeholder(event, "Password"))
 
-        continue_button = Button(login_section, text="Continue", font=("Helvetica", 16), width=30, height=1, bg="#c8102e", fg=settings.text_color, command=self.open_main_interface)
+        continue_button = Button(login_section, text="Continue", font=("Helvetica", 16), width=30, height=1, bg="#c8102e", fg=settings.text_color, command=self.login)
         continue_button.pack(pady=20)
 
         or_frame = Frame(login_section, bg='white')
@@ -135,6 +137,16 @@ class App:
             event.widget.insert(0, placeholder)
             event.widget.config(fg='grey', show="")
 
+    def login(self):
+        email = self.email_entry.get()
+        password = self.password_entry.get()
+
+        if email in user_data and user_data[email] == password:
+            messagebox.showinfo("Success", "Login successful!")
+            self.open_main_interface()
+        else:
+            messagebox.showerror("Error", "Invalid email or password.")
+
     def open_main_interface(self):
         self.window.destroy()
         MainInterface()
@@ -147,7 +159,7 @@ class App:
 class SignUpPage:
     def __init__(self):
         self.window = Tk()
-        self.window.title("Sign Up - Roskill Roundup")
+        self.window.title("Sign Up - Roskill Pulse")
         self.window.configure(bg=settings.primary_color)
         self.window.state('zoomed')
 
@@ -155,155 +167,97 @@ class SignUpPage:
         outside_frame.pack(expand=True, fill=BOTH)
 
         self.frame = Frame(outside_frame, bg='white')
-        self.frame.place(relx=0.5, rely=0.5, anchor=CENTER, width=500, height=500)
+        self.frame.place(relx=0.5, rely=0.5, anchor=CENTER, width=700, height=600)  # Increased size
 
-        signup_heading = Label(self.frame, text="Sign Up Page", font=("Helvetica", 24, "bold"), bg='white')
+        signup_heading = Label(self.frame, text="One Step Away", font=("Helvetica", 24, "bold"), bg='white')
         signup_heading.pack(pady=20)
 
-        self.username_entry = Entry(self.frame, font=("Helvetica", 16), width=30, fg='grey', bg='#f0f0f0')
+        content_frame = Frame(self.frame, bg='white')
+        content_frame.pack(pady=10, padx=20, expand=True)  # Added padding and expansion
+
+        self.username_entry = Entry(content_frame, font=("Helvetica", 18), width=35, fg='grey', bg='#f0f0f0')
         self.username_entry.pack(pady=10)
         self.username_entry.insert(0, "Username")
         self.username_entry.bind("<FocusIn>", lambda event: self.clear_placeholder(event, "Username"))
         self.username_entry.bind("<FocusOut>", lambda event: self.restore_placeholder(event, "Username"))
 
-        self.email_entry = Entry(self.frame, font=("Helvetica", 16), width=30, fg='grey', bg='#f0f0f0')
-        self.email_entry.pack(pady=10)
-        self.email_entry.insert(0, "Email address")
-        self.email_entry.bind("<FocusIn>", lambda event: self.clear_placeholder(event, "Email address"))
-        self.email_entry.bind("<FocusOut>", lambda event: self.restore_placeholder(event, "Email address"))
+        self.signup_email_entry = Entry(content_frame, font=("Helvetica", 18), width=35, fg='grey', bg='#f0f0f0')
+        self.signup_email_entry.pack(pady=10)
+        self.signup_email_entry.insert(0, "Email")
+        self.signup_email_entry.bind("<FocusIn>", lambda event: self.clear_placeholder(event, "Email"))
+        self.signup_email_entry.bind("<FocusOut>", lambda event: self.restore_placeholder(event, "Email"))
 
-        self.password_entry = Entry(self.frame, font=("Helvetica", 16), width=30, fg='grey', bg='#f0f0f0')
-        self.password_entry.pack(pady=10)
-        self.password_entry.insert(0, "Password")
-        self.password_entry.bind("<FocusIn>", lambda event: self.clear_placeholder(event, "Password"))
-        self.password_entry.bind("<FocusOut>", lambda event: self.restore_placeholder(event, "Password"))
+        self.signup_password_entry = Entry(content_frame, font=("Helvetica", 18), width=35, fg='grey', bg='#f0f0f0')
+        self.signup_password_entry.pack(pady=10)
+        self.signup_password_entry.insert(0, "Password")
+        self.signup_password_entry.bind("<FocusIn>", lambda event: self.clear_placeholder(event, "Password"))
+        self.signup_password_entry.bind("<FocusOut>", lambda event: self.restore_placeholder(event, "Password"))
 
-        self.confirm_password_entry = Entry(self.frame, font=("Helvetica", 16), width=30, fg='grey', bg='#f0f0f0')
-        self.confirm_password_entry.pack(pady=10)
-        self.confirm_password_entry.insert(0, "Confirm Password")
-        self.confirm_password_entry.bind("<FocusIn>", lambda event: self.clear_placeholder(event, "Confirm Password"))
-        self.confirm_password_entry.bind("<FocusOut>", lambda event: self.restore_placeholder(event, "Confirm Password"))
+        self.signup_confirm_password_entry = Entry(content_frame, font=("Helvetica", 18), width=35, fg='grey', bg='#f0f0f0')
+        self.signup_confirm_password_entry.pack(pady=10)
+        self.signup_confirm_password_entry.insert(0, "Confirm Password")
+        self.signup_confirm_password_entry.bind("<FocusIn>", lambda event: self.clear_placeholder(event, "Confirm Password"))
+        self.signup_confirm_password_entry.bind("<FocusOut>", lambda event: self.restore_placeholder(event, "Confirm Password"))
 
-        signup_button = Button(self.frame, text="Sign Up", font=("Helvetica", 16), width=30, height=1, bg=settings.secondary_color, fg=settings.text_color, command=self.create_account)
+        signup_button = Button(content_frame, text="Sign Up", font=("Helvetica", 18), width=35, height=2, bg="#c8102e", fg=settings.text_color, command=self.signup)
         signup_button.pack(pady=20)
 
-        back_button = Button(self.frame, text="Back", font=("Helvetica", 12), width=10, height=1, bg=settings.primary_color, fg=settings.text_color, command=self.go_back)
-        back_button.pack(pady=20)
+        # Container for the back button to place it in the bottom right corner
+        back_button_container = Frame(self.frame, bg='white')
+        back_button_container.pack(side=BOTTOM, anchor=SE, padx=20, pady=20)
+
+        back_button = Button(back_button_container, text="Back to Login", font=("Helvetica", 14), bg="#c8102e", fg=settings.text_color, command=self.back_to_login)
+        back_button.pack()
 
         self.window.mainloop()
 
     def clear_placeholder(self, event, placeholder):
         if event.widget.get() == placeholder:
             event.widget.delete(0, "end")
-            event.widget.config(fg='black', show="*" if placeholder in ["Password", "Confirm Password"] else "")
+            event.widget.config(fg='black', show="*" if "Password" in placeholder else "")
 
     def restore_placeholder(self, event, placeholder):
         if not event.widget.get():
             event.widget.insert(0, placeholder)
             event.widget.config(fg='grey', show="")
 
-    def create_account(self):
+    def signup(self):
         username = self.username_entry.get()
-        email = self.email_entry.get()
-        password = self.password_entry.get()
-        confirm_password = self.confirm_password_entry.get()
+        email = self.signup_email_entry.get()
+        password = self.signup_password_entry.get()
+        confirm_password = self.signup_confirm_password_entry.get()
 
-        if not username or username == "Username":
-            messagebox.showerror("Error", "Please enter a valid username.")
-            return
-
-        if not email or email == "Email address":
-            messagebox.showerror("Error", "Please enter a valid email address.")
-            return
-
-        if not password or password == "Password":
-            messagebox.showerror("Error", "Please enter a valid password.")
-            return
-
-        if not confirm_password or confirm_password == "Confirm Password":
-            messagebox.showerror("Error", "Please confirm your password.")
+        if not username or not email or not password or not confirm_password:
+            messagebox.showerror("Error", "Please fill out all fields.")
             return
 
         if password != confirm_password:
             messagebox.showerror("Error", "Passwords do not match.")
             return
 
-        messagebox.showinfo("Success", "Account created successfully!")
-        self.go_back()
+        if email in user_data:
+            messagebox.showerror("Error", "Email already exists.")
+            return
 
-    def go_back(self):
+        user_data[email] = password
+        messagebox.showinfo("Success", "Sign up successful!")
+        self.back_to_login()
+
+    def back_to_login(self):
         self.window.destroy()
-        
         App()
 
 
 class MainInterface:
     def __init__(self):
         self.window = Tk()
-        self.window.title("Roskill Roundup")
-        self.window.configure(bg='white')
+        self.window.title("Roskill Pulse Main Interface")
+        self.window.configure(bg=settings.primary_color)
         self.window.state('zoomed')
 
-        self.top_frame = Frame(self.window, background=settings.primary_color, height=80)
-        self.top_frame.pack(side=TOP, fill=X)
-
-        mrgs_logo_path = os.path.join("images", "mrgs_logo.png")
-        self.mrgs_logo = Image.open(mrgs_logo_path)
-        self.mrgs_logo = self.mrgs_logo.resize((150, 75), Image.LANCZOS)
-        self.mrgs_logo = ImageTk.PhotoImage(self.mrgs_logo)
-        logo_label = Label(self.top_frame, image=self.mrgs_logo, bg=settings.primary_color)
-        logo_label.pack(side=LEFT, padx=10, pady=10)
-
-        title_label = Label(self.top_frame, text=settings.app_title, font=("Helvetica", 36, "bold"), bg=settings.primary_color, fg=settings.text_color)
-        title_label.pack(side=LEFT, padx=10, pady=10)
-
-        sidebar_frame = Frame(self.window, bg=settings.primary_color, width=200)
-        sidebar_frame.pack(side=LEFT, fill=Y)
-
-        self.sidebar_buttons = {}
-
-        sidebar_options = [("Home", self.open_home), ("Notices", self.open_notices), ("Profile", self.open_profile), ("Resources", self.open_resources), ("Settings", self.open_settings)]
-
-        for option, command in sidebar_options:
-            button = Button(sidebar_frame, text=option, font=("Helvetica", 16), bg=settings.primary_color, fg=settings.text_color, bd=0, highlightthickness=0, command=lambda cmd=command, opt=option: self.select_sidebar_button(cmd, opt))
-            button.pack(fill=X, pady=2)
-            self.sidebar_buttons[option] = button
-
-        self.main_content_frame = Frame(self.window, bg='white')
-        self.main_content_frame.pack(side=LEFT, fill=BOTH, expand=True)
+        main_label = Label(self.window, text="Welcome to the Main Interface!", font=("Helvetica", 24, "bold"), bg=settings.primary_color, fg=settings.text_color)
+        main_label.pack(expand=True)
 
         self.window.mainloop()
 
-    def select_sidebar_button(self, command, option):
-        for btn in self.sidebar_buttons.values():
-            btn.config(font=("Helvetica", 16, "normal"))
-
-        self.sidebar_buttons[option].config(font=("Helvetica", 16, "bold"))
-        command()
-
-    def open_home(self):
-        self.clear_main_content()
-        Label(self.main_content_frame, text="Welcome to the Home page!", font=("Helvetica", 24), bg='white').pack(pady=20)
-
-    def open_notices(self):
-        self.clear_main_content()
-        Label(self.main_content_frame, text="Here are the Notices.", font=("Helvetica", 24), bg='white').pack(pady=20)
-
-    def open_profile(self):
-        self.clear_main_content()
-        Label(self.main_content_frame, text="This is your Profile.", font=("Helvetica", 24), bg='white').pack(pady=20)
-
-    def open_resources(self):
-        self.clear_main_content()
-        Label(self.main_content_frame, text="Here are your Resources.", font=("Helvetica", 24), bg='white').pack(pady=20)
-
-    def open_settings(self):
-        self.clear_main_content()
-        Label(self.main_content_frame, text="Here are the Settings.", font=("Helvetica", 24), bg='white').pack(pady=20)
-
-    def clear_main_content(self):
-        for widget in self.main_content_frame.winfo_children():
-            widget.destroy()
-
-if __name__ == "__main__":
-    app = App()
+App()
