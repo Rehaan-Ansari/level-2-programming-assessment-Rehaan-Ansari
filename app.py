@@ -271,14 +271,14 @@ class MainInterface:
         title_label = Label(self.top_frame, text=settings.app_title, font=("Helvetica", 36, "bold"), bg=settings.primary_color, fg=settings.text_color)
         title_label.pack(side=LEFT, padx=10, pady=10)
 
-        sidebar_frame = Frame(self.window, bg='white', width=250)
+        sidebar_frame = Frame(self.window, bg=settings.primary_color, width=250)
         sidebar_frame.pack(side=LEFT, fill=Y)
 
         self.sidebar_buttons = {}
         sidebar_options = ["Home", "Notices", "Profile", "Resources", "Settings"]
 
         for option in sidebar_options:
-            button = Button(sidebar_frame, text=option, font=("Helvetica", 18), width=15, bg='white', fg='black', anchor='w', relief='flat', command=lambda opt=option: self.sidebar_button_click(opt))
+            button = Button(sidebar_frame, text=option, font=("Helvetica", 18), width=15, bg='white', fg='black', bd=1, relief='solid', command=lambda opt=option: self.sidebar_button_click(opt))
             button.pack(pady=10, padx=10)
             self.sidebar_buttons[option] = button
 
@@ -312,9 +312,9 @@ class MainInterface:
     def sidebar_button_click(self, option):
         # Method to handle sidebar button clicks and update their appearance
         for btn in self.sidebar_buttons.values():
-            btn.config(font=("Helvetica", 18), relief='flat', bg='white')  # Reset all buttons
+            btn.config(font=("Helvetica", 18), relief='solid', bg='white', fg='black', bd=1)  # Reset all buttons
 
-        self.sidebar_buttons[option].config(font=("Helvetica", 18, "bold"), relief='sunken', bg='#f0f0f0')  # Highlight selected button
+        self.sidebar_buttons[option].config(font=("Helvetica", 18, "bold"), relief='sunken', bg='white', fg='black', bd=1)  # Highlight selected button
         self.update_content(option)
 
     def update_content(self, option):
@@ -334,4 +334,3 @@ class MainInterface:
 
 if __name__ == "__main__":
     App()
-    
