@@ -339,6 +339,9 @@ class MainInterface:
             canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
             canvas.configure(yscrollcommand=scrollbar.set)
 
+            # Bind MouseWheel event for scrolling
+            canvas.bind_all("<MouseWheel>", lambda event: self.on_mousewheel(event, canvas))
+
             Label(scrollable_frame, text="Welcome to Pulse!", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
 
             # Add Principal's Message
@@ -394,7 +397,10 @@ class MainInterface:
         elif option == "Resources":
             Label(self.content_frame, text="Access school resources here.", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
         elif option == "Settings":
-            Label(self.content_frame, text="Adjust your settings here.", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
+            Label(self.content_frame, text="Configure your settings here.", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
 
+    def on_mousewheel(self, event, canvas):
+        canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        
 if __name__ == "__main__":
     App()
