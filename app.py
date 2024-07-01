@@ -310,11 +310,10 @@ class MainInterface:
             self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
     def sidebar_button_click(self, option):
-        # Method to handle sidebar button clicks and update their appearance
         for btn in self.sidebar_buttons.values():
-            btn.config(font=("Helvetica", 18), relief='solid', bg='white', fg='black', bd=1)  # Reset all buttons
+            btn.config(font=("Helvetica", 18), relief='solid', bg='white', fg='black', bd=1)
 
-        self.sidebar_buttons[option].config(font=("Helvetica", 18, "bold"), relief='sunken', bg='white', fg='black', bd=1)  # Highlight selected button
+        self.sidebar_buttons[option].config(font=("Helvetica", 18, "bold"), relief='sunken', bg='white', fg='black', bd=1)
         self.update_content(option)
 
     def update_content(self, option):
@@ -322,7 +321,53 @@ class MainInterface:
             widget.destroy()
 
         if option == "Home":
-            Label(self.content_frame, text="Welcome to Roskill Pulse Home!", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
+            Label(self.content_frame, text="Welcome to Pulse!", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
+
+            # Add Principal's Message
+            principal_frame = Frame(self.content_frame, bg='white', padx=20, pady=20)
+            principal_frame.pack(fill=BOTH, expand=True, padx=20, pady=10)
+
+            principal_heading = Label(principal_frame, text="Principal's Message", font=("Helvetica", 24, "bold"), bg='white')
+            principal_heading.pack(anchor='w', pady=(0, 10))
+
+            # Text paragraphs
+            principal_message_left = (
+                "Kia ora koutou\n\n"
+                "I would like to thank all the whānau of senior students who were able to come to our mentoring meetings on Thursday, June 20.\n\n"
+                "These meetings are an important part of our support for our senior students and an important connection with families. We value the partnership that we have with families and hope that we can build on this over the years as students move through the school.\n\n"
+                "Congratulations to our dance students for their performances in the Rūpeke Dance Showcase this week. This was an excellent example of the skill of our students and the support and care from the staff involved.\n\n"
+            )
+            principal_message_right = (
+                "‘Rūpeke’ means to come together and it was lovely to see so many families, friends and staff in the audience gathered to enjoy the wonder and storytelling of dance.\n\n"
+                "In keeping with the theme of gathering, I would like to thank all kaiako who contribute their efforts to the curricular and extracurricular clubs and teams they manage. As a school, we have achieved great success in areas such as wearable arts, literature, chess, and sports over the course of the term. This would not happen if not for the astounding commitment from kaiako towards the growth of our tauira.\n\n"
+                "With the end of Term 2 only two weeks away, I want to encourage all students to make the most of this time to complete assessments and stay on top of classwork. The school year is passing by very quickly, and we will be into the build-up to external exams before we know it.\n\n"
+                "Ngā manaakitanga\n\n"
+                "Tom Webb\n"
+                "Tumuaki | Principal\n\n"
+            )
+
+            left_frame = Frame(principal_frame, bg='white')
+            left_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=10)
+
+            right_frame = Frame(principal_frame, bg='white')
+            right_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=10)
+
+            left_text = Label(left_frame, text=principal_message_left, font=("Helvetica", 14), bg='white', justify=LEFT, wraplength=450)
+            left_text.pack(anchor='w')
+
+            right_text = Label(right_frame, text=principal_message_right, font=("Helvetica", 14), bg='white', justify=LEFT, wraplength=450)
+            right_text.pack(anchor='w')
+
+            # Add Principal's Image
+            principal_image_path = os.path.join("images", "principal.jpeg")
+            try:
+                principal_image = Image.open(principal_image_path)
+                principal_photo = ImageTk.PhotoImage(principal_image)
+                principal_image_label = Label(principal_frame, image=principal_photo, bg='white')
+                principal_image_label.image = principal_photo  # Keep a reference to avoid garbage collection
+                principal_image_label.pack(side=TOP, pady=10)
+            except FileNotFoundError:
+                print(f"File not found: {principal_image_path}")
         elif option == "Notices":
             Label(self.content_frame, text="Here are the latest notices.", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
         elif option == "Profile":
