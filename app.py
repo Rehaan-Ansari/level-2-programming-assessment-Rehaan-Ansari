@@ -321,10 +321,28 @@ class MainInterface:
             widget.destroy()
 
         if option == "Home":
-            Label(self.content_frame, text="Welcome to Pulse!", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
+            canvas = Canvas(self.content_frame, bg='white')
+            canvas.pack(side=LEFT, fill=BOTH, expand=True)
+
+            scrollbar = Scrollbar(self.content_frame, orient=VERTICAL, command=canvas.yview)
+            scrollbar.pack(side=RIGHT, fill=Y)
+
+            scrollable_frame = Frame(canvas, bg='white')
+
+            scrollable_frame.bind(
+                "<Configure>",
+                lambda e: canvas.configure(
+                    scrollregion=canvas.bbox("all")
+                )
+            )
+
+            canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+            canvas.configure(yscrollcommand=scrollbar.set)
+
+            Label(scrollable_frame, text="Welcome to Pulse!", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
 
             # Add Principal's Message
-            principal_frame = Frame(self.content_frame, bg='white', padx=20, pady=20)
+            principal_frame = Frame(scrollable_frame, bg='white', padx=20, pady=20)
             principal_frame.pack(fill=BOTH, expand=True, padx=20, pady=10)
 
             principal_heading = Label(principal_frame, text="Principal's Message", font=("Helvetica", 24, "bold"), bg='white')
@@ -368,6 +386,7 @@ class MainInterface:
                 principal_image_label.pack(side=TOP, pady=10)
             except FileNotFoundError:
                 print(f"File not found: {principal_image_path}")
+
         elif option == "Notices":
             Label(self.content_frame, text="Here are the latest notices.", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
         elif option == "Profile":
