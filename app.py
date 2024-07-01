@@ -44,15 +44,15 @@ class App:
         title_label.pack(side=LEFT, padx=10, pady=10)
 
         welcome_text_frame = Frame(self.window, bg='white', highlightbackground='#ffffff', highlightthickness=1, bd=0)
-        welcome_text_frame.place(relx=0.25, rely=0.5, anchor=CENTER, width=500, height=300)
+        welcome_text_frame.place(relx=0.25, rely=0.5, anchor=CENTER, width=500, height=200)  # Adjusted height
 
-        welcome_text_section = Frame(welcome_text_frame, bg='white', padx=20, pady=20)
+        welcome_text_section = Frame(welcome_text_frame, bg='white', padx=20, pady=10)  # Reduced pady
         welcome_text_section.pack(fill=BOTH, expand=True)
 
         subtitle = ("Welcome to Roskill Pulse! Engage with your school community, stay informed about events, and "
                     "access important resources with ease. Your hub for everything school-related.")
         subtitle_label = Label(welcome_text_section, text=subtitle, font=("Helvetica", 18), wraplength=460, justify=CENTER, bg='white')
-        subtitle_label.pack(expand=True, fill=BOTH, pady=(10, 10))
+        subtitle_label.pack(expand=True, fill=BOTH, pady=(10, 0))
 
         login_frame = Frame(self.window, bg='white', highlightbackground='#ffffff', highlightthickness=1, bd=0)
         login_frame.place(relx=0.75, rely=0.5, anchor=CENTER, width=500, height=450)
