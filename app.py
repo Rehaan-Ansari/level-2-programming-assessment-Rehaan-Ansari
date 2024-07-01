@@ -322,15 +322,16 @@ class MainInterface:
             widget.destroy()
 
         if option == "Home":
-            Label(self.content_frame, text="Welcome to Roskill Pulse Home!", font=("Helvetica", 24), bg='white').pack(expand=True)
+            Label(self.content_frame, text="Welcome to Roskill Pulse Home!", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
         elif option == "Notices":
-            Label(self.content_frame, text="Here are the latest notices.", font=("Helvetica", 24), bg='white').pack(expand=True)
+            Label(self.content_frame, text="Here are the latest notices.", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
         elif option == "Profile":
-            Label(self.content_frame, text="Manage your profile here.", font=("Helvetica", 24), bg='white').pack(expand=True)
+            Label(self.content_frame, text="Manage your profile here.", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
         elif option == "Resources":
-            Label(self.content_frame, text="Access school resources here.", font=("Helvetica", 24), bg='white').pack(expand=True)
+            Label(self.content_frame, text="Access school resources here.", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
         elif option == "Settings":
-            Label(self.content_frame, text="Adjust your settings here.", font=("Helvetica", 24), bg='white').pack(expand=True)
+            Label(self.content_frame, text="Adjust your settings here.", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
 
 if __name__ == "__main__":
     App()
+    
