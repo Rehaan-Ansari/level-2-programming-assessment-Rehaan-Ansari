@@ -341,42 +341,52 @@ class MainInterface:
         scrollable_frame = Frame(canvas, bg='white')
 
         scrollable_frame.bind(
-            "<Configure>",
-            lambda e: canvas.configure(
-                scrollregion=canvas.bbox("all")
-            )
+        "<Configure>",
+        lambda e: canvas.configure(
+            scrollregion=canvas.bbox("all")
         )
+    )
 
         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
         canvas.configure(yscrollcommand=scrollbar.set)
 
-        # Bind MouseWheel event for scrolling
+    # Bind MouseWheel event for scrolling
         canvas.bind_all("<MouseWheel>", lambda event: self.on_mousewheel(event, canvas))
 
-        Label(scrollable_frame, text="Welcome to Pulse!", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
+    # Wrapper frame for home page content
+        home_content_wrapper = Frame(scrollable_frame, bg='white')
+        home_content_wrapper.pack(anchor='center', padx=20, pady=20)
 
-        # Add Principal's Message
-        principal_frame = Frame(scrollable_frame, bg='white', padx=20, pady=20)
+        quote_frame = Frame(home_content_wrapper, bg='white', padx=20, pady=20)
+        quote_frame.pack(pady=20)
+
+    # Quote label
+        quote_label = Label(quote_frame, text="\"Education is the most powerful weapon which you can use to change the world.\"\n- Nelson Mandela",
+                        font=("Helvetica", 14), justify="center", wraplength=500)
+        quote_label.pack()
+
+    # Add Principal's Message
+        principal_frame = Frame(home_content_wrapper, bg='white', padx=20, pady=20)
         principal_frame.pack(fill=BOTH, expand=True, padx=20, pady=10)
 
         principal_heading = Label(principal_frame, text="From our Principal", font=("Helvetica", 24, "bold"), bg='white')
         principal_heading.pack(anchor='w', pady=(0, 10))
 
-        # Text paragraphs
+    # Text paragraphs
         principal_message_left = (
-            "Kia ora koutou\n\n"
-            "I would like to thank all the whānau of senior students who were able to come to our mentoring meetings on Thursday, June 20.\n\n"
-            "These meetings are an important part of our support for our senior students and an important connection with families. We value the partnership that we have with families and hope that we can build on this over the years as students move through the school.\n\n"
-            "Congratulations to our dance students for their performances in the Rūpeke Dance Showcase this week. This was an excellent example of the skill of our students and the support and care from the staff involved.\n\n"
-            "‘Rūpeke’ means to come together and it was lovely to see so many families, friends and staff in the audience gathered to enjoy the wonder and storytelling of dance.\n\n"
-        )
+        "Kia ora koutou\n\n"
+        "I would like to thank all the whānau of senior students who were able to come to our mentoring meetings on Thursday, June 20.\n\n"
+        "These meetings are an important part of our support for our senior students and an important connection with families. We value the partnership that we have with families and hope that we can build on this over the years as students move through the school.\n\n"
+        "Congratulations to our dance students for their performances in the Rūpeke Dance Showcase this week. This was an excellent example of the skill of our students and the support and care from the staff involved.\n\n"
+        "‘Rūpeke’ means to come together and it was lovely to see so many families, friends and staff in the audience gathered to enjoy the wonder and storytelling of dance.\n\n"
+    )
         principal_message_right = (
-            "In keeping with the theme of gathering, I would like to thank all kaiako who contribute their efforts to the curricular and extracurricular clubs and teams they manage. As a school, we have achieved great success in areas such as wearable arts, literature, chess, and sports over the course of the term. This would not happen if not for the astounding commitment from kaiako towards the growth of our tauira.\n\n"
-            "With the end of Term 2 only two weeks away, I want to encourage all students to make the most of this time to complete assessments and stay on top of classwork. The school year is passing by very quickly, and we will be into the build-up to external exams before we know it.\n\n"
-            "Ngā manaakitanga\n\n"
-            "Tom Webb\n"
-            "Tumuaki | Principal\n\n"
-        )
+        "In keeping with the theme of gathering, I would like to thank all kaiako who contribute their efforts to the curricular and extracurricular clubs and teams they manage. As a school, we have achieved great success in areas such as wearable arts, literature, chess, and sports over the course of the term. This would not happen if not for the astounding commitment from kaiako towards the growth of our tauira.\n\n"
+        "With the end of Term 2 only two weeks away, I want to encourage all students to make the most of this time to complete assessments and stay on top of classwork. The school year is passing by very quickly, and we will be into the build-up to external exams before we know it.\n\n"
+        "Ngā manaakitanga\n\n"
+        "Tom Webb\n"
+        "Tumuaki | Principal\n\n"
+    )
 
         left_frame = Frame(principal_frame, bg='white')
         left_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=10)
@@ -384,19 +394,11 @@ class MainInterface:
         right_frame = Frame(principal_frame, bg='white')
         right_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=10)
 
-        left_text = Label(left_frame, text=principal_message_left, font=("Helvetica", 14), bg='white', justify=LEFT, wraplength=450)
+        left_text = Label(left_frame, text=principal_message_left, font=("Helvetica", 14), bg='white', justify=LEFT, wraplength=500)
         left_text.pack(anchor='w')
 
-        right_text = Label(right_frame, text=principal_message_right, font=("Helvetica", 14), bg='white', justify=LEFT, wraplength=450)
+        right_text = Label(right_frame, text=principal_message_right, font=("Helvetica", 14), bg='white', justify=LEFT, wraplength=500)
         right_text.pack(anchor='w')
-        
-        principal_image_path = os.path.join("images", "principal.jpeg")
-        principal_image = Image.open(principal_image_path)
-        principal_image = principal_image.resize((150, 150), Image.LANCZOS)
-        principal_image = ImageTk.PhotoImage(principal_image)
-        principal_image_label = Label(principal_frame, image=principal_image, bg='white')
-        principal_image_label.image = principal_image
-        principal_image_label.pack(pady=10)
 
     def on_mousewheel(self, event, canvas):
         canvas.yview_scroll(int(-1*(event.delta/120)), "units")
