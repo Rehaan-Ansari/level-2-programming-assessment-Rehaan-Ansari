@@ -44,7 +44,7 @@ class App:
         title_label.pack(side=LEFT, padx=10, pady=10)
 
         welcome_text_frame = Frame(self.window, bg='white', highlightbackground='#ffffff', highlightthickness=1, bd=0)
-        welcome_text_frame.place(relx=0.25, rely=0.5, anchor=CENTER, width=500, height=200)  # Adjusted height
+        welcome_text_frame.place(relx=0.25, rely=0.5, anchor=CENTER, width=500, height=200)
 
         welcome_text_section = Frame(welcome_text_frame, bg='white', padx=20, pady=10)  # Reduced pady
         welcome_text_section.pack(fill=BOTH, expand=True)
@@ -271,14 +271,14 @@ class MainInterface:
         title_label = Label(self.top_frame, text=settings.app_title, font=("Helvetica", 36, "bold"), bg=settings.primary_color, fg=settings.text_color)
         title_label.pack(side=LEFT, padx=10, pady=10)
 
-        sidebar_frame = Frame(self.window, bg=settings.primary_color, width=250)
-        sidebar_frame.pack(side=LEFT, fill=Y)
+        self.sidebar_frame = Frame(self.window, bg=settings.primary_color, width=250)
+        self.sidebar_frame.pack(side=LEFT, fill=Y)
 
         self.sidebar_buttons = {}
         sidebar_options = ["Home", "Notices", "Profile", "Resources", "Settings"]
 
         for option in sidebar_options:
-            button = Button(sidebar_frame, text=option, font=("Helvetica", 18), width=15, bg='white', fg='black', bd=1, relief='solid', command=lambda opt=option: self.sidebar_button_click(opt))
+            button = Button(self.sidebar_frame, text=option, font=("Helvetica", 18), width=15, bg='white', fg='black', bd=1, relief='solid', command=lambda opt=option: self.sidebar_button_click(opt))
             button.pack(pady=10, padx=10)
             self.sidebar_buttons[option] = button
 
@@ -321,75 +321,7 @@ class MainInterface:
             widget.destroy()
 
         if option == "Home":
-            canvas = Canvas(self.content_frame, bg='white')
-            canvas.pack(side=LEFT, fill=BOTH, expand=True)
-
-            scrollbar = Scrollbar(self.content_frame, orient=VERTICAL, command=canvas.yview)
-            scrollbar.pack(side=RIGHT, fill=Y)
-
-            scrollable_frame = Frame(canvas, bg='white')
-
-            scrollable_frame.bind(
-                "<Configure>",
-                lambda e: canvas.configure(
-                    scrollregion=canvas.bbox("all")
-                )
-            )
-
-            canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-            canvas.configure(yscrollcommand=scrollbar.set)
-
-            # Bind MouseWheel event for scrolling
-            canvas.bind_all("<MouseWheel>", lambda event: self.on_mousewheel(event, canvas))
-
-            Label(scrollable_frame, text="Welcome to Pulse!", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
-
-            # Add Principal's Message
-            principal_frame = Frame(scrollable_frame, bg='white', padx=20, pady=20)
-            principal_frame.pack(fill=BOTH, expand=True, padx=20, pady=10)
-
-            principal_heading = Label(principal_frame, text="Principal's Message", font=("Helvetica", 24, "bold"), bg='white')
-            principal_heading.pack(anchor='w', pady=(0, 10))
-
-            # Text paragraphs
-            principal_message_left = (
-                "Kia ora koutou\n\n"
-                "I would like to thank all the whānau of senior students who were able to come to our mentoring meetings on Thursday, June 20.\n\n"
-                "These meetings are an important part of our support for our senior students and an important connection with families. We value the partnership that we have with families and hope that we can build on this over the years as students move through the school.\n\n"
-                "Congratulations to our dance students for their performances in the Rūpeke Dance Showcase this week. This was an excellent example of the skill of our students and the support and care from the staff involved.\n\n"
-            )
-            principal_message_right = (
-                "‘Rūpeke’ means to come together and it was lovely to see so many families, friends and staff in the audience gathered to enjoy the wonder and storytelling of dance.\n\n"
-                "In keeping with the theme of gathering, I would like to thank all kaiako who contribute their efforts to the curricular and extracurricular clubs and teams they manage. As a school, we have achieved great success in areas such as wearable arts, literature, chess, and sports over the course of the term. This would not happen if not for the astounding commitment from kaiako towards the growth of our tauira.\n\n"
-                "With the end of Term 2 only two weeks away, I want to encourage all students to make the most of this time to complete assessments and stay on top of classwork. The school year is passing by very quickly, and we will be into the build-up to external exams before we know it.\n\n"
-                "Ngā manaakitanga\n\n"
-                "Tom Webb\n"
-                "Tumuaki | Principal\n\n"
-            )
-
-            left_frame = Frame(principal_frame, bg='white')
-            left_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=10)
-
-            right_frame = Frame(principal_frame, bg='white')
-            right_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=10)
-
-            left_text = Label(left_frame, text=principal_message_left, font=("Helvetica", 14), bg='white', justify=LEFT, wraplength=450)
-            left_text.pack(anchor='w')
-
-            right_text = Label(right_frame, text=principal_message_right, font=("Helvetica", 14), bg='white', justify=LEFT, wraplength=450)
-            right_text.pack(anchor='w')
-
-            # Add Principal's Image
-            principal_image_path = os.path.join("images", "principal.jpeg")
-            try:
-                principal_image = Image.open(principal_image_path)
-                principal_photo = ImageTk.PhotoImage(principal_image)
-                principal_image_label = Label(principal_frame, image=principal_photo, bg='white')
-                principal_image_label.image = principal_photo  # Keep a reference to avoid garbage collection
-                principal_image_label.pack(side=TOP, pady=10)
-            except FileNotFoundError:
-                print(f"File not found: {principal_image_path}")
-
+            self.display_home_content()
         elif option == "Notices":
             Label(self.content_frame, text="Here are the latest notices.", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
         elif option == "Profile":
@@ -399,8 +331,75 @@ class MainInterface:
         elif option == "Settings":
             Label(self.content_frame, text="Configure your settings here.", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
 
+    def display_home_content(self):
+        canvas = Canvas(self.content_frame, bg='white')
+        canvas.pack(side=LEFT, fill=BOTH, expand=True)
+
+        scrollbar = Scrollbar(self.content_frame, orient=VERTICAL, command=canvas.yview)
+        scrollbar.pack(side=RIGHT, fill=Y)
+
+        scrollable_frame = Frame(canvas, bg='white')
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")
+            )
+        )
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        # Bind MouseWheel event for scrolling
+        canvas.bind_all("<MouseWheel>", lambda event: self.on_mousewheel(event, canvas))
+
+        Label(scrollable_frame, text="Welcome to Pulse!", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
+
+        # Add Principal's Message
+        principal_frame = Frame(scrollable_frame, bg='white', padx=20, pady=20)
+        principal_frame.pack(fill=BOTH, expand=True, padx=20, pady=10)
+
+        principal_heading = Label(principal_frame, text="From our Principal", font=("Helvetica", 24, "bold"), bg='white')
+        principal_heading.pack(anchor='w', pady=(0, 10))
+
+        # Text paragraphs
+        principal_message_left = (
+            "Kia ora koutou\n\n"
+            "I would like to thank all the whānau of senior students who were able to come to our mentoring meetings on Thursday, June 20.\n\n"
+            "These meetings are an important part of our support for our senior students and an important connection with families. We value the partnership that we have with families and hope that we can build on this over the years as students move through the school.\n\n"
+            "Congratulations to our dance students for their performances in the Rūpeke Dance Showcase this week. This was an excellent example of the skill of our students and the support and care from the staff involved.\n\n"
+            "‘Rūpeke’ means to come together and it was lovely to see so many families, friends and staff in the audience gathered to enjoy the wonder and storytelling of dance.\n\n"
+        )
+        principal_message_right = (
+            "In keeping with the theme of gathering, I would like to thank all kaiako who contribute their efforts to the curricular and extracurricular clubs and teams they manage. As a school, we have achieved great success in areas such as wearable arts, literature, chess, and sports over the course of the term. This would not happen if not for the astounding commitment from kaiako towards the growth of our tauira.\n\n"
+            "With the end of Term 2 only two weeks away, I want to encourage all students to make the most of this time to complete assessments and stay on top of classwork. The school year is passing by very quickly, and we will be into the build-up to external exams before we know it.\n\n"
+            "Ngā manaakitanga\n\n"
+            "Tom Webb\n"
+            "Tumuaki | Principal\n\n"
+        )
+
+        left_frame = Frame(principal_frame, bg='white')
+        left_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=10)
+
+        right_frame = Frame(principal_frame, bg='white')
+        right_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=10)
+
+        left_text = Label(left_frame, text=principal_message_left, font=("Helvetica", 14), bg='white', justify=LEFT, wraplength=450)
+        left_text.pack(anchor='w')
+
+        right_text = Label(right_frame, text=principal_message_right, font=("Helvetica", 14), bg='white', justify=LEFT, wraplength=450)
+        right_text.pack(anchor='w')
+        
+        principal_image_path = os.path.join("images", "principal.jpeg")
+        principal_image = Image.open(principal_image_path)
+        principal_image = principal_image.resize((150, 150), Image.LANCZOS)
+        principal_image = ImageTk.PhotoImage(principal_image)
+        principal_image_label = Label(principal_frame, image=principal_image, bg='white')
+        principal_image_label.image = principal_image
+        principal_image_label.pack(pady=10)
+
     def on_mousewheel(self, event, canvas):
-        canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
         
 if __name__ == "__main__":
     App()
