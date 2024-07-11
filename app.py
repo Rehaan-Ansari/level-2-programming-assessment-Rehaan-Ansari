@@ -378,6 +378,19 @@ class MainInterface:
         principal_heading = Label(principal_frame, text="From our Principal", font=("Helvetica", 24, "bold"), bg='white')
         principal_heading.pack(anchor='w', pady=(0, 10))
 
+        try:
+            image_path = os.path.join("images", "principal.jpg")
+            image = Image.open(image_path)
+            image = image.resize((1000, 650), Image.LANCZOS) 
+            photo = ImageTk.PhotoImage(image)
+
+            # Create image label
+            image_label = Label(principal_frame, image=photo, bg='white')
+            image_label.image = photo  
+            image_label.pack(pady=(0, 10))
+        except FileNotFoundError:
+            print(f"File not found: {image_path}")
+
         # Text paragraphs
         principal_message_left = (
             "Kia ora koutou\n\n"
