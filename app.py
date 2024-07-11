@@ -341,52 +341,58 @@ class MainInterface:
         scrollable_frame = Frame(canvas, bg='white')
 
         scrollable_frame.bind(
-        "<Configure>",
-        lambda e: canvas.configure(
-            scrollregion=canvas.bbox("all")
+            "<Configure>",
+            lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")
+            )
         )
-    )
 
         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
         canvas.configure(yscrollcommand=scrollbar.set)
 
-    # Bind MouseWheel event for scrolling
+        # Bind MouseWheel event for scrolling
         canvas.bind_all("<MouseWheel>", lambda event: self.on_mousewheel(event, canvas))
 
-    # Wrapper frame for home page content
+        # Wrapper frame for home page content
         home_content_wrapper = Frame(scrollable_frame, bg='white')
         home_content_wrapper.pack(anchor='center', padx=20, pady=20)
 
-        quote_frame = Frame(home_content_wrapper, bg='white', padx=20, pady=20)
-        quote_frame.pack(pady=20)
+        quote_frame = Frame(home_content_wrapper, bg='white', padx=20, pady=10)  # Setting equal top and bottom padding
+        quote_frame.pack(pady=(20, 10))  # Reduce bottom padding
 
-    # Quote label
-        quote_label = Label(quote_frame, text="\"Education is the most powerful weapon which you can use to change the world.\"\n- Nelson Mandela",
-                        font=("Helvetica", 14), justify="center", wraplength=500)
+# Quote label
+        quote_label = Label(quote_frame, text="\"Education is the most powerful weapon which you can use to change the world.\"\n                                                                                              - Nelson Mandela",
+            font=("Helvetica", 19, "bold"),  # Increased font size
+            justify="center", 
+            wraplength=900,
+            bg='white', 
+            fg='black',
+            padx=5,  # Added horizontal padding
+            pady=5)  # Added vertical padding
         quote_label.pack()
 
-    # Add Principal's Message
-        principal_frame = Frame(home_content_wrapper, bg='white', padx=20, pady=20)
-        principal_frame.pack(fill=BOTH, expand=True, padx=20, pady=10)
+# Add Principal's Message
+        principal_frame = Frame(home_content_wrapper, bg='white', padx=20, pady=20)  # Use single value for padding temporarily
+        principal_frame.pack(fill=BOTH, expand=True, padx=20, pady=(10, 20))  # Reduce top padding
 
         principal_heading = Label(principal_frame, text="From our Principal", font=("Helvetica", 24, "bold"), bg='white')
         principal_heading.pack(anchor='w', pady=(0, 10))
 
-    # Text paragraphs
+        # Text paragraphs
         principal_message_left = (
-        "Kia ora koutou\n\n"
-        "I would like to thank all the whānau of senior students who were able to come to our mentoring meetings on Thursday, June 20.\n\n"
-        "These meetings are an important part of our support for our senior students and an important connection with families. We value the partnership that we have with families and hope that we can build on this over the years as students move through the school.\n\n"
-        "Congratulations to our dance students for their performances in the Rūpeke Dance Showcase this week. This was an excellent example of the skill of our students and the support and care from the staff involved.\n\n"
-        "‘Rūpeke’ means to come together and it was lovely to see so many families, friends and staff in the audience gathered to enjoy the wonder and storytelling of dance.\n\n"
-    )
+            "Kia ora koutou\n\n"
+            "I would like to thank all the whānau of senior students who were able to come to our mentoring meetings on Thursday, June 20.\n\n"
+            "These meetings are an important part of our support for our senior students and an important connection with families. We value the partnership that we have with families and hope that we can build on this over the years as students move through the school.\n\n"
+            "Congratulations to our dance students for their performances in the Rūpeke Dance Showcase this week. This was an excellent example of the skill of our students and the support and care from the staff involved.\n\n"
+            "‘Rūpeke’ means to come together and it was lovely to see so many families, friends and staff in the audience gathered to enjoy the wonder and storytelling of dance.\n\n"
+        )
         principal_message_right = (
-        "In keeping with the theme of gathering, I would like to thank all kaiako who contribute their efforts to the curricular and extracurricular clubs and teams they manage. As a school, we have achieved great success in areas such as wearable arts, literature, chess, and sports over the course of the term. This would not happen if not for the astounding commitment from kaiako towards the growth of our tauira.\n\n"
-        "With the end of Term 2 only two weeks away, I want to encourage all students to make the most of this time to complete assessments and stay on top of classwork. The school year is passing by very quickly, and we will be into the build-up to external exams before we know it.\n\n"
-        "Ngā manaakitanga\n\n"
-        "Tom Webb\n"
-        "Tumuaki | Principal\n\n"
-    )
+            "In keeping with the theme of gathering, I would like to thank all kaiako who contribute their efforts to the curricular and extracurricular clubs and teams they manage. As a school, we have achieved great success in areas such as wearable arts, literature, chess, and sports over the course of the term. This would not happen if not for the astounding commitment from kaiako towards the growth of our tauira.\n\n"
+            "With the end of Term 2 only two weeks away, I want to encourage all students to make the most of this time to complete assessments and stay on top of classwork. The school year is passing by very quickly, and we will be into the build-up to external exams before we know it.\n\n"
+            "Ngā manaakitanga\n\n"
+            "Tom Webb\n"
+            "Tumuaki | Principal\n\n"
+        )
 
         left_frame = Frame(principal_frame, bg='white')
         left_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=10)
@@ -402,6 +408,7 @@ class MainInterface:
 
     def on_mousewheel(self, event, canvas):
         canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
         
 if __name__ == "__main__":
     App()
