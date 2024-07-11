@@ -4,7 +4,6 @@ from PIL import Image, ImageTk
 import os
 import app_settings as settings
 
-# Dictionary to store user data
 user_data = {}
 
 class App:
@@ -46,7 +45,7 @@ class App:
         welcome_text_frame = Frame(self.window, bg='white', highlightbackground='#ffffff', highlightthickness=1, bd=0)
         welcome_text_frame.place(relx=0.25, rely=0.5, anchor=CENTER, width=500, height=200)
 
-        welcome_text_section = Frame(welcome_text_frame, bg='white', padx=20, pady=10)  # Reduced pady
+        welcome_text_section = Frame(welcome_text_frame, bg='white', padx=20, pady=10)
         welcome_text_section.pack(fill=BOTH, expand=True)
 
         subtitle = ("Welcome to Roskill Pulse! Engage with your school community, stay informed about events, and "
@@ -155,7 +154,6 @@ class App:
         self.window.destroy()
         SignUpPage()
 
-
 class SignUpPage:
     def __init__(self):
         self.window = Tk()
@@ -167,14 +165,14 @@ class SignUpPage:
         outside_frame.pack(expand=True, fill=BOTH)
 
         self.frame = Frame(outside_frame, bg='white')
-        self.frame.place(relx=0.5, rely=0.5, anchor=CENTER, width=700, height=600)  # Increased size
-
+        self.frame.place(relx=0.5, rely=0.5, anchor=CENTER, width=700, height=600)  
+        
         signup_heading = Label(self.frame, text="One Step Away", font=("Helvetica", 24, "bold"), bg='white')
         signup_heading.pack(pady=20)
 
         content_frame = Frame(self.frame, bg='white')
-        content_frame.pack(pady=10, padx=20, expand=True)  # Added padding and expansion
-
+        content_frame.pack(pady=10, padx=20, expand=True)
+        
         self.username_entry = Entry(content_frame, font=("Helvetica", 18), width=35, fg='grey', bg='#f0f0f0')
         self.username_entry.pack(pady=10)
         self.username_entry.insert(0, "Username")
@@ -235,7 +233,6 @@ class SignUpPage:
     def go_back(self):
         self.window.destroy()
         App()
-
 
 class MainInterface:
     def __init__(self):
@@ -350,28 +347,18 @@ class MainInterface:
         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
         canvas.configure(yscrollcommand=scrollbar.set)
 
-        # Bind MouseWheel event for scrolling
         canvas.bind_all("<MouseWheel>", lambda event: self.on_mousewheel(event, canvas))
 
-        # Wrapper frame for home page content
         home_content_wrapper = Frame(scrollable_frame, bg='white')
         home_content_wrapper.pack(anchor='center', padx=20, pady=20)
 
-        quote_frame = Frame(home_content_wrapper, bg='white', padx=20, pady=10)  # Setting equal top and bottom padding
-        quote_frame.pack(pady=(20, 10))  # Reduce bottom padding
+        quote_frame = Frame(home_content_wrapper, bg='white', padx=20, pady=10) 
+        quote_frame.pack(pady=(20, 10))  
 
-# Quote label
         quote_label = Label(quote_frame, text="\"Education is the most powerful weapon which you can use to change the world.\"\n                                                                                              - Nelson Mandela",
-            font=("Helvetica", 19, "bold"),  # Increased font size
-            justify="center", 
-            wraplength=900,
-            bg='white', 
-            fg='black',
-            padx=5,  # Added horizontal padding
-            pady=5)  # Added vertical padding
+            font=("Helvetica", 19, "bold"), justify="center", wraplength=900, bg='white', fg='black', padx=5, pady=5)  
         quote_label.pack()
 
-# Add Principal's Message
         principal_frame = Frame(home_content_wrapper, bg='white', padx=20, pady=20)  # Use single value for padding temporarily
         principal_frame.pack(fill=BOTH, expand=True, padx=20, pady=(10, 20))  # Reduce top padding
 
@@ -384,14 +371,12 @@ class MainInterface:
             image = image.resize((1000, 650), Image.LANCZOS) 
             photo = ImageTk.PhotoImage(image)
 
-            # Create image label
             image_label = Label(principal_frame, image=photo, bg='white')
             image_label.image = photo  
             image_label.pack(pady=(0, 10))
         except FileNotFoundError:
             print(f"File not found: {image_path}")
 
-        # Text paragraphs
         principal_message_left = (
             "Kia ora koutou\n\n"
             "I would like to thank all the whānau of senior students who were able to come to our mentoring meetings on Thursday, June 20.\n\n"
@@ -422,6 +407,5 @@ class MainInterface:
     def on_mousewheel(self, event, canvas):
         canvas.yview_scroll(int(-1*(event.delta/120)), "units")
 
-        
 if __name__ == "__main__":
     App()
