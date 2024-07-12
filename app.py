@@ -2,9 +2,20 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageTk
 import os
+import json
 import app_settings as settings
 
-user_data = {}
+def load_user_data():
+    if os.path.exists('user_data.json'):
+        with open('user_data.json', 'r') as file:
+            return json.load(file)
+    return {}
+
+def save_user_data(data):
+    with open('user_data.json', 'w') as file:
+        json.dump(data, file)
+
+user_data = load_user_data()
 
 class App:
     def __init__(self):
@@ -227,6 +238,7 @@ class SignUpPage:
             messagebox.showerror("Error", "Passwords do not match.")
         else:
             user_data[email] = password
+            save_user_data(user_data)
             messagebox.showinfo("Success", "Sign up successful!")
             self.go_back()
 
