@@ -238,7 +238,6 @@ class SignUpPage:
             messagebox.showerror("Error", "Passwords do not match.")
         else:
             user_data[email] = password
-            save_user_data(user_data)
             messagebox.showinfo("Success", "Sign up successful!")
             self.go_back()
 
@@ -371,8 +370,8 @@ class MainInterface:
             font=("Helvetica", 19, "bold"), justify="center", wraplength=900, bg='white', fg='black', padx=5, pady=5)  
         quote_label.pack()
 
-        principal_frame = Frame(home_content_wrapper, bg='white', padx=20, pady=20)  # Use single value for padding temporarily
-        principal_frame.pack(fill=BOTH, expand=True, padx=20, pady=(10, 20))  # Reduce top padding
+        principal_frame = Frame(home_content_wrapper, bg='white', padx=20, pady=20)  
+        principal_frame.pack(fill=BOTH, expand=True, padx=20, pady=(10, 20))  
 
         principal_heading = Label(principal_frame, text="From our Principal", font=("Helvetica", 24, "bold"), bg='white')
         principal_heading.pack(anchor='w', pady=(0, 10))
