@@ -5,18 +5,21 @@ import os
 import json
 import app_settings as settings
 
+#This function is responsible for loading user data from a JSON file.
 def load_user_data():
     if os.path.exists('user_data.json'):
         with open('user_data.json', 'r') as file:
             return json.load(file)
     return {}
 
+#This function is responsible for saving user data to a JSON file.
 def save_user_data(data):
     with open('user_data.json', 'w') as file:
         json.dump(data, file)
 
 user_data = load_user_data()
 
+#This class is responsible for the main application window, including the login and signup functionalities.
 class App:
     def __init__(self):
         self.window = Tk()
@@ -27,6 +30,7 @@ class App:
 
         self.bg_image_loaded = False
 
+        #This block of code is responsible for loading the background image and sets up the resize functionality.
         image_path = os.path.join("images", "I1.jpg")
         try:
             self.bg_image = Image.open(image_path)
@@ -40,6 +44,7 @@ class App:
             self.bg_label = Label(self.window, bg='white')
             self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
+        #This block of code is used to setup the top bar with the title and logo. 
         self.top_frame = Frame(self.window, background=settings.primary_color, height=80)
         self.top_frame.pack(side=TOP, fill=X)
 
@@ -53,6 +58,7 @@ class App:
         title_label = Label(self.top_frame, text=settings.app_title, font=("Helvetica", 36, "bold"), bg=settings.primary_color, fg=settings.text_color)
         title_label.pack(side=LEFT, padx=10, pady=10)
 
+        #This block of code sets up the welcome text in the main window
         welcome_text_frame = Frame(self.window, bg='white', highlightbackground='#ffffff', highlightthickness=1, bd=0)
         welcome_text_frame.place(relx=0.25, rely=0.5, anchor=CENTER, width=500, height=200)
 
@@ -64,6 +70,7 @@ class App:
         subtitle_label = Label(welcome_text_section, text=subtitle, font=("Helvetica", 18), wraplength=460, justify=CENTER, bg='white')
         subtitle_label.pack(expand=True, fill=BOTH, pady=(10, 0))
 
+        #This section of code sets up the login section in the main window.
         login_frame = Frame(self.window, bg='white', highlightbackground='#ffffff', highlightthickness=1, bd=0)
         login_frame.place(relx=0.75, rely=0.5, anchor=CENTER, width=500, height=450)
 
@@ -117,6 +124,7 @@ class App:
 
         self.window.mainloop()
 
+    #This function is responsible for resizing the background image when the window is resized.
     def resize_bg_image(self, event=None):
         if self.bg_image_loaded:
             window_width = self.window.winfo_width()
@@ -137,16 +145,18 @@ class App:
             self.bg_label.image = self.bg_photo
             self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
+    #This function is responsible for clearing the placeholder text when the user focuses on the entry field.
     def clear_placeholder(self, event, placeholder):
         if event.widget.get() == placeholder:
             event.widget.delete(0, "end")
             event.widget.config(fg='black', show="*" if placeholder == "Password" else "")
-
+    #This function is responsible for restoring the placeholder text when the user moves focus away from the entry field.
     def restore_placeholder(self, event, placeholder):
         if not event.widget.get():
             event.widget.insert(0, placeholder)
             event.widget.config(fg='grey', show="")
 
+    #This function is responsible for handling the login process such as checking user credentials and opening the main interface.
     def login(self):
         email = self.email_entry.get()
         password = self.password_entry.get()
@@ -157,14 +167,17 @@ class App:
         else:
             messagebox.showerror("Error", "Invalid email or password.")
 
+    #This function is responsible for opening the main interface.
     def open_main_interface(self):
         self.window.destroy()
         MainInterface()
 
+    #This function is responsible for opening the signup page.
     def open_signup_page(self):
         self.window.destroy()
         SignUpPage()
 
+#This class is responsible for the sign-up page
 class SignUpPage:
     def __init__(self):
         self.window = Tk()
@@ -216,16 +229,19 @@ class SignUpPage:
 
         self.window.mainloop()
 
+    #Like the one I used earlier, this is also used for clearing the placeholder text when the user focuses on the entry field.
     def clear_placeholder(self, event, placeholder):
         if event.widget.get() == placeholder:
             event.widget.delete(0, "end")
             event.widget.config(fg='black', show="*" if "password" in placeholder.lower() else "")
 
+    #Responsible for restoring the placeholder text when the user moves focus away from the entry field.
     def restore_placeholder(self, event, placeholder):
         if not event.widget.get():
             event.widget.insert(0, placeholder)
             event.widget.config(fg='grey', show="")
 
+    #This function is responsible for handling the signup process and saving new user data.
     def signup(self):
         username = self.username_entry.get()
         email = self.email_entry.get()
@@ -241,11 +257,14 @@ class SignUpPage:
             messagebox.showinfo("Success", "Sign up successful!")
             self.go_back()
 
+    #This function returns the user to the login page.
     def go_back(self):
         self.window.destroy()
         App()
 
+#This class is responsible for the main interface of the application after login or guest access.
 class MainInterface:
+    #This function sets up the main window which includes the background image, top frame, sidebar, and content area.
     def __init__(self):
         self.window = Tk()
         self.window.title("Roskill Pulse - Main Interface")
@@ -253,6 +272,7 @@ class MainInterface:
         self.window.geometry("1200x800")
         self.window.minsize(1000, 700)
 
+        #This block of code loads and sets the background image.
         image_path = os.path.join("images", "I1.jpg")
         try:
             self.bg_image = Image.open(image_path)
@@ -261,11 +281,13 @@ class MainInterface:
             self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
             self.bg_image_loaded = True
             self.window.bind("<Configure>", self.resize_bg_image)
+        #Error mechanism incase the background image file is not found.
         except FileNotFoundError:
             print(f"File not found: {image_path}")
             self.bg_label = Label(self.window, bg='white')
             self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
+        #Sets the the top frame with logo and title in the main interface.
         self.top_frame = Frame(self.window, background=settings.primary_color, height=80)
         self.top_frame.pack(side=TOP, fill=X)
 
@@ -279,6 +301,7 @@ class MainInterface:
         title_label = Label(self.top_frame, text=settings.app_title, font=("Helvetica", 36, "bold"), bg=settings.primary_color, fg=settings.text_color)
         title_label.pack(side=LEFT, padx=10, pady=10)
 
+        #Code responsible for setting up the sidebar with navigation buttons.
         self.sidebar_frame = Frame(self.window, bg=settings.primary_color, width=250)
         self.sidebar_frame.pack(side=LEFT, fill=Y)
 
@@ -290,6 +313,7 @@ class MainInterface:
             button.pack(pady=10, padx=10)
             self.sidebar_buttons[option] = button
 
+        #Sets up the content frame where different sections are displayed.
         self.content_frame = Frame(self.window, bg='white')
         self.content_frame.pack(side=LEFT, fill=BOTH, expand=True)
 
@@ -297,6 +321,7 @@ class MainInterface:
 
         self.window.mainloop()
 
+    #This function resizes the background image to fit the window while maintaining consistent ratio 
     def resize_bg_image(self, event=None):
         if hasattr(self, 'bg_image'):
             window_width = self.window.winfo_width()
@@ -317,6 +342,7 @@ class MainInterface:
             self.bg_label.image = self.bg_photo
             self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
+    #This function handles the sidebar button clicks, updating the content area accordingly.
     def sidebar_button_click(self, option):
         for btn in self.sidebar_buttons.values():
             btn.config(font=("Helvetica", 18), relief='solid', bg='white', fg='black', bd=1)
@@ -324,6 +350,7 @@ class MainInterface:
         self.sidebar_buttons[option].config(font=("Helvetica", 18, "bold"), relief='sunken', bg='white', fg='black', bd=1)
         self.update_content(option)
 
+    #This function updates the content area based on the selected sidebar option.
     def update_content(self, option):
         for widget in self.content_frame.winfo_children():
             widget.destroy()
@@ -339,6 +366,7 @@ class MainInterface:
         elif option == "Settings":
             Label(self.content_frame, text="Configure your settings here.", font=("Helvetica", 24), bg='white').pack(side=TOP, fill=X, padx=20, pady=20)
 
+    #This function displays the content for the "Home" option.
     def display_home_content(self):
         canvas = Canvas(self.content_frame, bg='white')
         canvas.pack(side=LEFT, fill=BOTH, expand=True)
@@ -415,6 +443,7 @@ class MainInterface:
         right_text = Label(right_frame, text=principal_message_right, font=("Helvetica", 14), bg='white', justify=LEFT, wraplength=500)
         right_text.pack(anchor='w')
 
+    #This function handles mouse wheel scrolling for the canvas in the content area.
     def on_mousewheel(self, event, canvas):
         canvas.yview_scroll(int(-1*(event.delta/120)), "units")
 
